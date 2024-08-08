@@ -1,0 +1,52 @@
+{
+  "name": "teach-frontend",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@imengyu/vue3-context-menu": "^1.4.2",
+    "axios": "^1.7.3",
+    "dexie": "^4.0.8",
+    "fuse.js": "^7.0.0",
+    "ink-mde": "^0.33.0",
+    "lodash-es": "^4.17.21",
+    "naive-ui": "^2.39.0",
+    "pinia": "^2.2.1",
+    "vue": "^3.4.36",
+    "vue-router": "4.4.3",
+    "vue3-emoji-picker": "^1.1.8",
+    "vuedraggable": "^4.1.0"
+  },
+  "devDependencies": {
+    "@iconify-json/carbon": "^1.1.37",
+    "@iconify-json/mdi": "^1.1.68",
+    "@iconify/vue": "^4.1.2",
+    "@pinia/testing": "^0.1.5",
+    "@types/lodash-es": "^4.17.12",
+    "@unocss/reset": "^0.61.9",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vueuse/core": "^10.11.0",
+    "axios-mock-adapter": "^2.0.0",
+    "cross-env": "^7.0.3",
+    "fake-indexeddb": "^6.0.0",
+    "flush-promises": "^1.0.2",
+    "fs-extra": "^11.2.0",
+    "glob": "^10.4.5",
+    "happy-dom": "14.12.3",
+    "minimatch": "^10.0.1",
+    "typescript": "^5.5.4",
+    "unocss": "^0.61.9",
+    "vite": "5.4.0",
+    "vitest": "2.0.5",
+    "vue-router-mock": "^1.1.0",
+    "vue-tsc": "^2.0.29"
+  }
+}
