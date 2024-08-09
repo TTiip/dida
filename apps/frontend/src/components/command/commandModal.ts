@@ -2,6 +2,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { useIsMac } from '@/composables'
 
 const showCommandModal = ref(false)
+export const returnValue = '延迟后,修改了showCommandModal的值为false'
 
 export function useCommandModal() {
   function openCommandModal() {
@@ -10,6 +11,14 @@ export function useCommandModal() {
 
   function closeCommandModal() {
     showCommandModal.value = false
+  }
+
+  function closeCommandModalShutDownFiveSeconds(cb: (...args: any) => void, time: number = 1000) {
+    showCommandModal.value = true
+    setTimeout(() => {
+      showCommandModal.value = false
+      cb(returnValue)
+    }, time)
   }
 
   function registerKeyboardShortcut() {
@@ -38,6 +47,7 @@ export function useCommandModal() {
     showCommandModal,
     openCommandModal,
     closeCommandModal,
+    closeCommandModalShutDownFiveSeconds,
     registerKeyboardShortcut,
   }
 }
