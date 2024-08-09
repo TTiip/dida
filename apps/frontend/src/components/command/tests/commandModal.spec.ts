@@ -4,6 +4,16 @@ import { fireEvent, useSetup } from '@/tests/helper'
 import * as misc from '@/composables/misc'
 import { computed } from "vue"
 
+// 模拟 useIsMac 方法一，切记不要覆盖其他的方法和参数
+// vi.mock('@/composables/misc', async (importOriginal) => {
+// 	const options = await importOriginal()
+// 	return Object.assign({}, options, {
+// 		useIsMac() {
+// 			return computed(() => true)
+// 		}
+// 	})
+// })
+
 describe('测试命令 command modal', () => {
 	// 每次调用前都重置状态 非常重要!!!
   beforeEach(() => {
@@ -35,8 +45,8 @@ describe('测试命令 command modal', () => {
 	})
 
 	test('使用 cmd+k 打开命令', () => {
+		// 模拟 useIsMac 方法二(推荐!!!)
 		vi.spyOn(misc, 'useIsMac').mockReturnValueOnce(computed(() => true))
-
 		const { registerKeyboardShortcut, showCommandModal } = useCommandModal()
 		const { wrapper } = useSetup(() => {
 			registerKeyboardShortcut()
@@ -54,6 +64,7 @@ describe('测试命令 command modal', () => {
 	})
 
 	test('使用 ctrl+k 打开命令', () => {
+		// 模拟 useIsMac 方法二(推荐!!!)
 		vi.spyOn(misc, 'useIsMac').mockReturnValueOnce(computed(() => false))
 
 		const { registerKeyboardShortcut, showCommandModal } = useCommandModal()
