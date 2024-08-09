@@ -18,7 +18,7 @@
     "lodash-es": "^4.17.21",
     "naive-ui": "^2.39.0",
     "pinia": "^2.2.1",
-    "vue": "^3.4.36",
+    "vue": "^3.4.37",
     "vue-router": "4.4.3",
     "vue3-emoji-picker": "^1.1.8",
     "vuedraggable": "^4.1.0"
@@ -33,7 +33,7 @@
     "@vitejs/plugin-vue": "^5.1.2",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
     "@vue/test-utils": "^2.4.6",
-    "@vueuse/core": "^10.11.0",
+    "@vueuse/core": "^10.11.1",
     "axios-mock-adapter": "^2.0.0",
     "cross-env": "^7.0.3",
     "fake-indexeddb": "^6.0.0",
