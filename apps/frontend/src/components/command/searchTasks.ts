@@ -1,4 +1,5 @@
 import Fuse from 'fuse.js'
+import type { FuseResult } from 'fuse.js'
 import { ref } from 'vue'
 import { TaskStatus, completeSmartProject, useListProjectsStore, useTasksStore } from '@/store'
 import type { TasksSelector } from '@/store'
@@ -11,7 +12,7 @@ interface SearchTaskItem {
   from: TasksSelector | undefined
 }
 
-const filteredTasks = ref<Fuse.FuseResult<SearchTaskItem>[]>([])
+const filteredTasks = ref<FuseResult<SearchTaskItem>[]>([])
 const fuse = new Fuse([] as SearchTaskItem[], {
   keys: ['title', 'desc'],
 })
@@ -25,6 +26,7 @@ export function useSearchTasks() {
     const fuseTasks = tasks.map((task) => {
       const done = task.status === TaskStatus.COMPLETED
       const from = done ? completeSmartProject : projectsStore.findProject(task.projectId)
+
       return {
         id: task.id!,
         title: task.title,
