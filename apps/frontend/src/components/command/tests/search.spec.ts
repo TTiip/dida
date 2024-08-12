@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test, vi } from "vitest"
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest"
 import { useSearch } from "../search"
 
 const searchTasks = vi.fn()
@@ -40,6 +40,11 @@ describe('测试search组件', () => {
 		resetSearchTasks.mockClear()
 		searchCommands.mockClear()
 		resetSearchCommands.mockClear()
+	})
+
+	afterEach(() => {
+		// 每个测试case结束以后 重置mock时间
+		vi.useRealTimers()
 	})
 
 	test('当开始搜索的时候 loading 为true', async () => {
