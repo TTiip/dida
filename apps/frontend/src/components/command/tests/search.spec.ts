@@ -43,6 +43,7 @@ describe('测试search组件', () => {
 	})
 
 	afterEach(() => {
+		// 还没搞清楚啥情况 有时候用了 会导致奇怪的问题，使用待定
 		// 每个测试case结束以后 重置mock时间
 		vi.useRealTimers()
 	})
