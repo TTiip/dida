@@ -10,6 +10,10 @@ import { useCommand } from '@/composables/command'
 describe('群居测试模块', () => {
 	describe('搜索任务', () => {
 		beforeEach(() => {
+			// 重置 search 的值(重要!!!)
+			const { search } = useSearch()
+			search.value = ''
+
 			vi.useFakeTimers()
 
 			createTestingPinia({
@@ -28,10 +32,11 @@ describe('群居测试模块', () => {
 			})
 		})
 
-		// 此处添加会导致 测试测试case不通过(原因不详 稍后研究下)
-		// afterEach(() => {
-		// 	vi.useRealTimers()
-		// })
+		// 此处添加会导致 测试测试case不通过(原因不详 目前重置search值可以解决)
+		// 如果是没必要使用真实的时间 就不用加 感觉这个用了会有问题
+		afterEach(() => {
+			vi.useRealTimers()
+		})
 
 		test('搜索任务时 loading 应为 true', async () => {
 			const { search, loading } = useSearch()
@@ -171,6 +176,18 @@ describe('群居测试模块', () => {
 				name: '切换皮肤',
 				execute () {}
 			})
+		})
+
+		beforeEach(() => {
+			// 重置 search 的值(重要!!!)
+			const { search } = useSearch()
+			search.value = '>'
+
+			vi.useFakeTimers()
+		})
+
+		afterEach(() => {
+			vi.useRealTimers()
 		})
 
 		test('测试一个不存在的命令', async () => {
