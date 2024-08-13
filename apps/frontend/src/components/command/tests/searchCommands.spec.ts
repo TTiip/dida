@@ -17,12 +17,12 @@ describe('搜索命令', () => {
 		})
 	})
 
+	// 每次请求之前都reset commands 的列表值
 	beforeEach(() => {
 		const { resetSearchCommands } = useSearchCommands()
 		resetSearchCommands()
 	})
 
-	// 每次请求之前都reset commands 的列表值
 	test('搜索不存在的命令', () => {
 		const { searchCommands, filteredCommands } = useSearchCommands()
 		searchCommands('不存在的主页')
