@@ -10,9 +10,9 @@ import { useCommand } from '@/composables/command'
 describe('群居测试模块', () => {
 	describe('搜索任务', () => {
 		beforeEach(() => {
-			// 重置 search 的值(重要!!!)
-			const { search } = useSearch()
-			search.value = ''
+			// 重置值(重要!!!)
+			const { resetSearch } = useSearch()
+			resetSearch()
 
 			vi.useFakeTimers()
 
@@ -179,9 +179,9 @@ describe('群居测试模块', () => {
 		})
 
 		beforeEach(() => {
-			// 重置 search 的值(重要!!!)
-			const { search } = useSearch()
-			search.value = '>'
+			// 重置值(重要!!!)
+			const { resetSearch } = useSearch()
+			resetSearch()
 
 			vi.useFakeTimers()
 		})
