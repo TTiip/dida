@@ -21,56 +21,58 @@ vi.mocked(fetchCreateTask).mockImplementation(async (title: string) => {
 })
 
 describe('tasks store', () => {
-	beforeEach(() => {
-		setActivePinia(createPinia())
+	describe('添加任务', () => {
+		beforeEach(() => {
+			setActivePinia(createPinia())
 
-		// 重置 mock
-		// vi.mocked(fetchCreateTask).mockClear()
-		// 重置所有的 mock
-		vi.clearAllMocks()
-	})
+			// 重置 mock
+			// vi.mocked(fetchCreateTask).mockClear()
+			// 重置所有的 mock
+			vi.clearAllMocks()
+		})
 
-	test('添加task 当前的 currentActiveTask 是一个 undefined 的时候不应该添加', async () => {
-		const taskSelectorStore = useTasksSelectorStore()
+		test('添加task 当前的 currentActiveTask 是一个 undefined 的时候不应该添加', async () => {
+			const taskSelectorStore = useTasksSelectorStore()
 
-		const taskStore = useTasksStore()
-		taskSelectorStore.currentSelector = undefined
+			const taskStore = useTasksStore()
+			taskSelectorStore.currentSelector = undefined
 
-		const task = await taskStore.addTask('吃饭')
+			const task = await taskStore.addTask('吃饭')
 
-		expect(task).toBeUndefined()
-		expect(taskStore.tasks.length).toBe(0)
-		expect(taskStore.currentActiveTask).toBeUndefined()
-		expect(fetchCreateTask).not.toBeCalled()
-	})
+			expect(task).toBeUndefined()
+			expect(taskStore.tasks.length).toBe(0)
+			expect(taskStore.currentActiveTask).toBeUndefined()
+			expect(fetchCreateTask).not.toBeCalled()
+		})
 
-	test('添加task 当前的 currentActiveTask 类型是一个 smartProject 的时候不应该添加', async () => {
-		const taskSelectorStore = useTasksSelectorStore()
+		test('添加task 当前的 currentActiveTask 类型是一个 smartProject 的时候不应该添加', async () => {
+			const taskSelectorStore = useTasksSelectorStore()
 
-		const taskStore = useTasksStore()
-		taskSelectorStore.currentSelector = completeSmartProject
+			const taskStore = useTasksStore()
+			taskSelectorStore.currentSelector = completeSmartProject
 
-		const task = await taskStore.addTask('吃饭')
+			const task = await taskStore.addTask('吃饭')
 
-		expect(task).toBeUndefined()
-		expect(taskStore.tasks.length).toBe(0)
-		expect(taskStore.currentActiveTask).toBeUndefined()
-		expect(fetchCreateTask).not.toBeCalled()
-	})
+			expect(task).toBeUndefined()
+			expect(taskStore.tasks.length).toBe(0)
+			expect(taskStore.currentActiveTask).toBeUndefined()
+			expect(fetchCreateTask).not.toBeCalled()
+		})
 
-	test('添加task 应当在列表的最前面', async () => {
-		const taskSelectorStore = useTasksSelectorStore()
+		test('添加task 应当在列表的最前面', async () => {
+			const taskSelectorStore = useTasksSelectorStore()
 
-		const taskStore = useTasksStore()
-		taskSelectorStore.currentSelector = liveListProject
+			const taskStore = useTasksStore()
+			taskSelectorStore.currentSelector = liveListProject
 
-		await taskStore.addTask('吃饭')
-		const task1 = await taskStore.addTask('运动')
+			await taskStore.addTask('吃饭')
+			const task1 = await taskStore.addTask('运动')
 
-		expect(task1?.title).toBe('运动')
-		expect(taskStore.tasks.length).toBe(2)
-		expect(taskStore.tasks[0]).toEqual(task1)
-		expect(taskStore.currentActiveTask).toEqual(task1)
-		expect(fetchCreateTask).toBeCalledWith(task1?.title, liveListProject.id)
+			expect(task1?.title).toBe('运动')
+			expect(taskStore.tasks.length).toBe(2)
+			expect(taskStore.tasks[0]).toEqual(task1)
+			expect(taskStore.currentActiveTask).toEqual(task1)
+			expect(fetchCreateTask).toBeCalledWith(task1?.title, liveListProject.id)
+		})
 	})
 })
