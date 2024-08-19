@@ -11,14 +11,18 @@ vi.mocked(fetchCreateTask).mockImplementation(async (title: string) => createTas
 // 不验证类型 直接提供一个 空数据 即可
 vi.mocked(fetchAllTasks).mockResolvedValue([])
 
+
+let id = 0
+let position = 0
+// 测试数据一定要正确!! 否则很容易出问题
 function createTaskResponse (title: string) {
 	return {
 		title: title,
 		content: '这是内容',
 		status: TaskStatus.ACTIVE,
 		projectId: '1',
-		position: 1,
-		_id: '1',
+		position: position++,
+		_id: String(id++),
 		createdAt: new Date().toString(),
 		updatedAt: new Date().toString()
 	}
@@ -36,6 +40,9 @@ function expectTaskDataStructure (task: any) {
 beforeEach(() => {
 	setActivePinia(createPinia())
 
+	// 重置数据
+	id = 0
+	position = 0
 	const taskSelectorStore = useTasksSelectorStore()
 	taskSelectorStore.currentSelector = liveListProject
 
@@ -177,6 +184,53 @@ describe('tasks store', () => {
 
 			expect(fetchAllTasks).toBeCalledWith({ status: TaskStatus.ACTIVE })
 			expect(fetchAllTasks).toBeCalledWith({ status: TaskStatus.COMPLETED })
+		})
+	})
+
+	describe('取消已经完成的任务', () => {
+		test('取消已经完成的任务', async () => {
+			const taskStore = useTasksStore()
+
+			const task1 = (await taskStore.addTask('吃饭'))!
+			const task2 = (await taskStore.addTask('睡觉'))!
+			const task3 = (await taskStore.addTask('打豆豆'))!
+
+			await taskStore.completeTask(task2)
+			await taskStore.cancelCompleteTask(task2)
+
+			expect(taskStore.tasks[1]).toEqual(task2)
+			expect(taskStore.tasks[1].status).toBe(TaskStatus.ACTIVE)
+			expect(fetchRestoreTask).toBeCalledWith(task2.id)
+		})
+
+		// 细看逻辑 最后一条可能会有问题 需要单独测试 处理
+		test('取消已经完成的任务 - 操作最后一条数据', async () => {
+			const taskStore = useTasksStore()
+
+			const task1 = (await taskStore.addTask('吃饭'))!
+			const task2 = (await taskStore.addTask('睡觉'))!
+			const task3 = (await taskStore.addTask('打豆豆'))!
+
+			await taskStore.completeTask(task1)
+			await taskStore.cancelCompleteTask(task1)
+
+			expect(taskStore.tasks[2]).toEqual(task1)
+			expect(taskStore.tasks[2].status).toBe(TaskStatus.ACTIVE)
+			expect(fetchRestoreTask).toBeCalledWith(task1.id)
+		})
+
+		// 细看逻辑 最后一条可能会有问题 需要单独测试 处理
+		test('取消已经完成的任务 - 只有一条数据', async () => {
+			const taskStore = useTasksStore()
+
+			const task1 = (await taskStore.addTask('吃饭'))!
+
+			await taskStore.completeTask(task1)
+			await taskStore.cancelCompleteTask(task1)
+
+			expect(taskStore.tasks[0]).toEqual(task1)
+			expect(taskStore.tasks[0].status).toBe(TaskStatus.ACTIVE)
+			expect(fetchRestoreTask).toBeCalledWith(task1.id)
 		})
 	})
 })
