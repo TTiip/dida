@@ -36,10 +36,14 @@ describe('测试search组件', () => {
 
 		// 等待 resetSearch 所有的异步执行完成，避免后面调用问题
 		await vi.runAllTimersAsync()
-		searchTasks.mockClear()
-		resetSearchTasks.mockClear()
-		searchCommands.mockClear()
-		resetSearchCommands.mockClear()
+
+		// 使用这个全部重置
+		vi.clearAllMocks()
+		// 依次清除使用的 mock
+		// searchTasks.mockClear()
+		// resetSearchTasks.mockClear()
+		// searchCommands.mockClear()
+		// resetSearchCommands.mockClear()
 	})
 
 	afterEach(() => {
