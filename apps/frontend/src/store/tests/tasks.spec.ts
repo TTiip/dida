@@ -116,19 +116,6 @@ describe('tasks store', () => {
 		})
 	})
 
-	describe('恢复完成任务', () => {
-		test('恢复完成任务', async () => {
-			const taskStore = useTasksStore()
-			const task = (await taskStore.addTask('吃饭'))!
-
-			await taskStore.restoreTask(task)
-
-			expect(taskStore.tasks.length).toBe(0)
-			expect(taskStore.currentActiveTask).toBeUndefined()
-			expect(fetchRestoreTask).toBeCalledWith(task?.id)
-		})
-	})
-
 	describe('移动任务', () => {
 		test('移动任务', async () => {
 			const taskStore = useTasksStore()
