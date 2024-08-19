@@ -10,6 +10,7 @@ import {
   fetchUpdateTaskContent,
   fetchUpdateTaskPosition,
   fetchUpdateTaskTitle,
+  fetchUpdateTaskProperties
 } from '@/api'
 import { TasksSelectorType, useTasksSelectorStore } from '@/store'
 import type { TaskResponse } from '@/api/types'
@@ -144,6 +145,20 @@ export const useTasksStore = defineStore('tasksStore', () => {
     task.position = newPosition
   }
 
+  // Pick 取出interface上的 某些属性
+  // Partial 选中字段可以不传递(可选)
+  async function updateTaskProperties(task: Task, properties: Partial<Pick<Task, 'content' | 'title' | 'position'>>) {
+    let key: keyof typeof properties
+    for (key in properties) {
+      const newVal = properties[key]
+      const oldVal = task[key]
+      if (newVal !== oldVal) {
+        Reflect.set(task, key, newVal)
+        fetchUpdateTaskProperties(task.id, { [key]: properties[key] })
+      }
+    }
+  }
+
   async function findAllTasksNotRemoved(): Promise<Task[]> {
     const activeTasks = await fetchAllTasks({ status: TaskStatus.ACTIVE })
     const completedTasks = await fetchAllTasks({
@@ -182,6 +197,7 @@ export const useTasksStore = defineStore('tasksStore', () => {
     updateTaskTitle,
     updateTaskContent,
     updateTaskPosition,
+    updateTaskProperties,
   }
 })
 

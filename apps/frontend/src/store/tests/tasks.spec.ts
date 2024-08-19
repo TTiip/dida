@@ -1,7 +1,7 @@
 import { describe, expect, test, vi, beforeEach } from "vitest"
 import { TaskStatus, useTasksStore } from "../tasks"
 import { liveListProject } from "@/tests/fixture"
-import { fetchAllTasks, fetchCompleteTask, fetchCreateTask, fetchMoveTaskToProject, fetchRemoveTask, fetchRestoreTask } from "@/api"
+import { fetchUpdateTaskProperties, fetchAllTasks, fetchCompleteTask, fetchCreateTask, fetchMoveTaskToProject, fetchRemoveTask, fetchRestoreTask, fetchUpdateTaskContent, fetchUpdateTaskPosition, fetchUpdateTaskTitle } from "@/api"
 import { createPinia, setActivePinia } from "pinia"
 import { useTasksSelectorStore } from "../tasksSelector"
 import { completeSmartProject } from "../smartProjects"
@@ -231,6 +231,92 @@ describe('tasks store', () => {
 			expect(taskStore.tasks[0]).toEqual(task1)
 			expect(taskStore.tasks[0].status).toBe(TaskStatus.ACTIVE)
 			expect(fetchRestoreTask).toBeCalledWith(task1.id)
+		})
+	})
+
+	describe('更新title', () => {
+		test('更新title', async () => {
+			const taskStore = useTasksStore()
+			const oldTitle = '吃饭'
+			const newTitle = '写代码'
+
+			const task = (await taskStore.addTask(oldTitle))!
+			await taskStore.updateTaskTitle(task, newTitle)
+
+			expect(task.title).toBe(newTitle)
+			expect(fetchUpdateTaskTitle).toBeCalledWith(task.id, newTitle)
+		})
+
+		test('更新title - 当titile没有变化的时候不进行更新', async () => {
+			const taskStore = useTasksStore()
+			const oldTitle = '吃饭'
+
+			const task = (await taskStore.addTask(oldTitle))!
+			await taskStore.updateTaskTitle(task, task.title)
+
+			expect(task.title).toBe(oldTitle)
+			expect(fetchUpdateTaskTitle).not.toBeCalled()
+		})
+	})
+
+	describe('更新content', () => {
+		test('更新content', async () => {
+			const taskStore = useTasksStore()
+			const newContent = '这是写代码'
+
+			const task = (await taskStore.addTask('吃饭'))!
+			await taskStore.updateTaskContent(task, newContent)
+
+			expect(task.content).toBe(newContent)
+			expect(fetchUpdateTaskContent).toBeCalledWith(task.id, newContent)
+		})
+
+		test('更新content - 当content没有变化的时候不进行更新', async () => {
+			const taskStore = useTasksStore()
+
+			const task = (await taskStore.addTask('吃饭'))!
+			await taskStore.updateTaskContent(task, task.content)
+
+			expect(task.content).toBe(task.content)
+			expect(fetchUpdateTaskContent).not.toBeCalled()
+		})
+	})
+
+	describe('更新位置', () => {
+		test('更新位置', async () => {
+			const taskStore = useTasksStore()
+			const newPosition = 5
+
+			const task = (await taskStore.addTask('吃饭'))!
+			await taskStore.updateTaskPosition(task, newPosition)
+
+			expect(task.position).toBe(newPosition)
+			expect(fetchUpdateTaskPosition).toBeCalledWith(task.id, newPosition)
+		})
+
+		test('更新位置 - 当content没有变化的时候不进行更新', async () => {
+			const taskStore = useTasksStore()
+
+			const task = (await taskStore.addTask('吃饭'))!
+			await taskStore.updateTaskPosition(task, task.position)
+
+			expect(task.position).toBe(task.position)
+			expect(fetchUpdateTaskPosition).not.toBeCalled()
+		})
+	})
+
+	describe('通过属性来更新任务的标题、内容、位置', () => {
+		test('通过属性来更新任务的标题、内容、位置', async () => {
+			const taskStore = useTasksStore()
+
+			const newProperties = {
+				title: '新标题'
+			}
+			const task = (await taskStore.addTask('吃饭'))!
+			taskStore.updateTaskProperties(task, newProperties)
+
+			expect(task.title).toBe(newProperties.title)
+			expect(fetchUpdateTaskProperties).toBeCalledWith(task.id, newProperties)
 		})
 	})
 })
