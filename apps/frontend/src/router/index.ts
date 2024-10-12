@@ -43,16 +43,28 @@ export function setupRouterGuard(router: Router) {
   })
 
   router.beforeEach((to, from, next) => {
-    if (to.matched.some(r => r.meta.requiresAuth)) {
-      if (checkHaveToken())
+    if (to.matched.some((r) => r.meta.requiresAuth)) {
+      if (checkHaveToken()) {
         next()
-      else
+      } else {
         messageRedirectToSignIn(() => next({ name: RouteNames.LOGIN }))
-    }
-    else {
+      }
+    } else {
       next()
     }
   })
+
+  // router.beforeEach((to, from, next) => {
+  //   if (to.matched.some(r => r.meta.requiresAuth)) {
+  //     if (checkHaveToken())
+  //       next()
+  //     else
+  //       messageRedirectToSignIn(() => next({ name: RouteNames.LOGIN }))
+  //   }
+  //   else {
+  //     next()
+  //   }
+  // })
 }
 
 let router: Router
